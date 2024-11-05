@@ -1,15 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
-from openai import OpenAI
-
 from prompts.first_lesson_prompt import PROMPT
-
-
-from dotenv import load_dotenv
-
-load_dotenv()
-
-client = OpenAI()
+from client import client
 
 
 # URL of the page you want to scrape
