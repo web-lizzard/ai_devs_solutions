@@ -29,7 +29,6 @@ PROMPT = """
         """
 
 
-
 def get_initial_response() -> dict:
     response = requests.get(URL, json={"text": "ready", "msgID": 0})
 
@@ -37,16 +36,14 @@ def get_initial_response() -> dict:
 
 
 def answer_question(question: str) -> str:
-    completion = client.chat.completions.create(model="gpt-3.5-turbo", messages=[{
-        "role": "system",
-        "content": PROMPT
-    },
-    {
-    "role": "user", 
-    "content": question
-    }
-    ])
-    
+    completion = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": PROMPT},
+            {"role": "user", "content": question},
+        ],
+    )
+
     if not len(completion.choices):
         raise Exception("BAD RESPONSE FROM OPENAPI")
 
@@ -58,20 +55,17 @@ def answer_question(question: str) -> str:
 
     return response.content
 
+
 def send_response(payload: dict):
     return requests.get(URL, json=payload).json()
 
+
 def main():
     response = get_initial_response()
-    msgID = response['msgID']
-    text = response['text']
+    msgID = response["msgID"]
+    text = response["text"]
     print("Question is", text)
-    response = send_response(
-        {
-            "msgID": msgID,
-            "text": answer_question(question=text)
-        }
-    )
+    response = send_response({"msgID": msgID, "text": answer_question(question=text)})
     print(response)
 
 
